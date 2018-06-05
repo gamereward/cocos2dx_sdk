@@ -197,7 +197,8 @@ namespace Grd{
 		void logout(const GrdStringFunc& callback);
 		void login(const std::string &username, const std::string &password, std::string &otp, const GrdStringFunc& callback);
 		void registerAccount(const std::string &username, const std::string &password, std::string &email, std::string &userdata, const GrdStringFunc& callback);
-		void requestResetPassword(const std::string &username, const GrdStringFunc& callback);
+		void requestResetPassword(const std::string &email, const GrdStringFunc& callback);
+		void resetPassword(const std::string &token, const std::string &newpassword, const GrdStringFunc& callback);
 		void requestEnableOtp(const GrdSpriteFunc& callback);
 		void enableOtp(std::string otp, bool enabled, const GrdStringFunc& callback);
 		void updateBalance(const GrdStringFunc& callback);
@@ -214,6 +215,7 @@ namespace Grd{
 		const std::string REGISTER_ACTION = "createaccount";
 		const std::string LOGOUT_ACTION = "logout";
 		const std::string REQUEST_RESETPASSWORD_ACTION = "requestresetpassword";
+		const std::string RESETPASSWORD_ACTION = "doresetpassword";
 		const std::string REQUEST_ENABLE_OTP_ACTION = "requestotp";
 		const std::string ENABLE_OTP_ACTION = "enableotp";
 		const std::string CALL_SERVERSCRIPT_ACTION = "callserverscript";
@@ -262,6 +264,7 @@ namespace Grd{
 		void onLogoutCallBack(int error, Json* data, int callbackId);
 		void onRegisterCallBack(int error, Json* data, int callbackId);
 		void onRequestResetPasswordCallBack(int error, Json* data, int callbackId);
+		void onResetPasswordCallBack(int error, Json* data, int callbackId);
 		void onCallServerScriptCallBack(int error, Json* data, int callbackId);
 		void onRequestEnableOtpCallBack(int error, Json* data, int callbackId);
 		void onEnableOtpCallBack(int error, Json* data, int callbackId);

@@ -29,8 +29,7 @@ bool LoginScene::init()
 	isWating = false;
 	const std::string appid = "cc8b8744dbb1353393aac31d371af9a55a67df16";
 	const std::string secret = "1679091c5a880faf6fb5e6087eb1b2dc4daa3db355ef2b0e64b472968cb70f0df4be00279ee2e0a53eafdaa94a151e2ccbe3eb2dad4e422a7cba7b261d923784";
-	Grd::GrdManager::init(appid,secret,Grd::TEST_NET);
-
+	Grd::GrdManager::init(appid, secret, Grd::TEST_NET);
 	this->createLogin();
 	return true;
 }
@@ -155,13 +154,13 @@ void LoginScene::createRegister(){
 		this->addChild(this->emailField, 1);
 	}
 	y -= 2 * lineHeight;
-	auto btnCancel = ui::Button::create("button.png", "button_selected.png","");
+	auto btnCancel = ui::Button::create("button.png", "button_selected.png", "");
 	if (btnCancel != nullptr)
 	{
 		btnCancel->setPosition(Vec2(x + textboxMargin, y));
 		btnCancel->setTitleText("Cancel");
 		btnCancel->setTitleFontSize(10);
-		float scale = lineHeight/ btnCancel->getContentSize().height;
+		float scale = lineHeight / btnCancel->getContentSize().height;
 		btnCancel->setScale(scale);
 		btnCancel->addClickEventListener(CC_CALLBACK_1(LoginScene::onBackButtonClick, this));
 		this->addChild(btnCancel, 1);
@@ -169,7 +168,7 @@ void LoginScene::createRegister(){
 	auto btnRegister = ui::Button::create("button.png", "button_selected.png");
 	if (btnRegister != nullptr)
 	{
-		btnRegister->setPosition(Vec2(x + 3 * textboxMargin , y));
+		btnRegister->setPosition(Vec2(x + 3 * textboxMargin, y));
 		float scale = lineHeight / btnRegister->getContentSize().height;
 		btnRegister->setScale(scale);
 		btnRegister->setTitleText("Create Account");
@@ -182,7 +181,163 @@ void LoginScene::createRegister(){
 	this->lblMessage = Label::createWithTTF("", "fonts/Marker Felt.ttf", 24);
 	if (this->lblMessage != nullptr)
 	{
-		this->lblMessage->setPosition(Vec2(origin.x + visibleSize.width/2, y));
+		this->lblMessage->setPosition(Vec2(origin.x + visibleSize.width / 2, y));
+		this->lblMessage->setTextColor(Color4B(255, 0, 0, 255));
+		this->addChild(this->lblMessage, 1);
+	}
+}
+
+void LoginScene::createForgotPassword(){
+	this->removeAllChildren();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto label = Label::createWithTTF("FORGOT PASSWORD", "fonts/Marker Felt.ttf", 30);
+	if (label != nullptr)
+	{
+		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+			origin.y + visibleSize.height - label->getContentSize().height));
+		this->addChild(label, 1);
+	}
+	auto textboxMargin = visibleSize.width / 8;
+	auto lineHeight = visibleSize.height / 10;
+	auto x = origin.x + visibleSize.width / 2 - 2 * textboxMargin;
+	auto y = origin.y + visibleSize.height / 2 + 2 * lineHeight;
+	auto textColor = cocos2d::Color3B(0, 0, 0);
+	label = Label::createWithTTF("Email:", "fonts/Marker Felt.ttf", 16);
+	if (label != nullptr)
+	{
+		label->setPosition(Vec2(x, y));
+		this->addChild(label, 1);
+	}
+	this->emailField = ui::EditBox::create(cocos2d::Size(cocos2d::Size(3 * textboxMargin, lineHeight - 10)), "input.png");
+	if (this->emailField != nullptr)
+	{
+		this->emailField->setPosition(Vec2(x + 2 * textboxMargin, y));
+		this->emailField->setFontColor(textColor);
+		this->addChild(this->emailField, 1);
+	}
+	y -= 2 * lineHeight;
+	auto btnCancel = ui::Button::create("button.png", "button_selected.png", "");
+	if (btnCancel != nullptr)
+	{
+		btnCancel->setPosition(Vec2(x + textboxMargin, y));
+		btnCancel->setTitleText("Cancel");
+		btnCancel->setTitleFontSize(10);
+		float scale = lineHeight / btnCancel->getContentSize().height;
+		btnCancel->setScale(scale);
+		btnCancel->addClickEventListener(CC_CALLBACK_1(LoginScene::onBackButtonClick, this));
+		this->addChild(btnCancel, 1);
+	}
+	auto btnSendEmail = ui::Button::create("button.png", "button_selected.png");
+	if (btnSendEmail != nullptr)
+	{
+		btnSendEmail->setPosition(Vec2(x + 3 * textboxMargin, y));
+		float scale = lineHeight / btnSendEmail->getContentSize().height;
+		btnSendEmail->setScale(scale);
+		btnSendEmail->setTitleText("Send email");
+		btnSendEmail->setTitleFontSize(10);
+		btnSendEmail->addClickEventListener(CC_CALLBACK_1(LoginScene::onSendEmailResetPasswordClick, this));
+		this->addChild(btnSendEmail, 1);
+	}
+
+	y -= 1.5*lineHeight;
+	this->lblMessage = Label::createWithTTF("", "fonts/Marker Felt.ttf", 24);
+	if (this->lblMessage != nullptr)
+	{
+		this->lblMessage->setPosition(Vec2(origin.x + visibleSize.width / 2, y));
+		this->lblMessage->setTextColor(Color4B(255, 0, 0, 255));
+		this->addChild(this->lblMessage, 1);
+	}
+}
+
+
+void LoginScene::createResetPassword(){
+	this->removeAllChildren();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto label = Label::createWithTTF("RESET PASSWORD", "fonts/Marker Felt.ttf", 30);
+	if (label != nullptr)
+	{
+		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+			origin.y + visibleSize.height - label->getContentSize().height));
+		this->addChild(label, 1);
+	}
+
+	label = Label::createWithTTF("An email was sent to your email.\r\nPlease check email to get the token code.", "fonts/Marker Felt.ttf", 18);
+	if (label != nullptr)
+	{
+		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+			origin.y + visibleSize.height - 3 * label->getContentSize().height));
+		this->addChild(label, 1);
+	}
+
+	auto textboxMargin = visibleSize.width / 8;
+	auto lineHeight = visibleSize.height / 10;
+	auto x = origin.x + visibleSize.width / 2 - 2 * textboxMargin;
+	auto y = origin.y + visibleSize.height / 2 + 2 * lineHeight;
+	auto textColor = cocos2d::Color3B(0, 0, 0);
+
+	label = Label::createWithTTF("New password:", "fonts/Marker Felt.ttf", 16);
+	if (label != nullptr)
+	{
+		label->setPosition(Vec2(x, y));
+		this->addChild(label, 1);
+	}
+	this->passwordField = ui::EditBox::create(cocos2d::Size(cocos2d::Size(3 * textboxMargin, lineHeight - 10)), "input.png");
+	if (this->passwordField != nullptr)
+	{
+		this->passwordField->setPosition(Vec2(x + 2 * textboxMargin, y));
+		this->passwordField->setFontColor(textColor);
+		this->addChild(this->passwordField, 1);
+	}
+	y -= 1.5*lineHeight;
+	label = Label::createWithTTF("Token:", "fonts/Marker Felt.ttf", 16);
+	if (label != nullptr)
+	{
+		label->setPosition(Vec2(x, y));
+		this->addChild(label, 1);
+	}
+
+
+	this->emailField = ui::EditBox::create(cocos2d::Size(cocos2d::Size(3 * textboxMargin, lineHeight - 10)), "input.png");
+	if (this->emailField != nullptr)
+	{
+		this->emailField->setPosition(Vec2(x + 2 * textboxMargin, y));
+		this->emailField->setFontColor(textColor);
+		this->addChild(this->emailField, 1);
+	}
+
+
+
+	y -= 2 * lineHeight;
+	auto btnCancel = ui::Button::create("button.png", "button_selected.png", "");
+	if (btnCancel != nullptr)
+	{
+		btnCancel->setPosition(Vec2(x + textboxMargin, y));
+		btnCancel->setTitleText("Cancel");
+		btnCancel->setTitleFontSize(10);
+		float scale = lineHeight / btnCancel->getContentSize().height;
+		btnCancel->setScale(scale);
+		btnCancel->addClickEventListener(CC_CALLBACK_1(LoginScene::onBackButtonClick, this));
+		this->addChild(btnCancel, 1);
+	}
+	auto btnResetPassword = ui::Button::create("button.png", "button_selected.png");
+	if (btnResetPassword != nullptr)
+	{
+		btnResetPassword->setPosition(Vec2(x + 3 * textboxMargin, y));
+		float scale = lineHeight / btnResetPassword->getContentSize().height;
+		btnResetPassword->setScale(scale);
+		btnResetPassword->setTitleText("Reset Password");
+		btnResetPassword->setTitleFontSize(10);
+		btnResetPassword->addClickEventListener(CC_CALLBACK_1(LoginScene::onResetPasswordClick, this));
+		this->addChild(btnResetPassword, 1);
+	}
+
+	y -= 1.5*lineHeight;
+	this->lblMessage = Label::createWithTTF("", "fonts/Marker Felt.ttf", 24);
+	if (this->lblMessage != nullptr)
+	{
+		this->lblMessage->setPosition(Vec2(origin.x + visibleSize.width / 2, y));
 		this->lblMessage->setTextColor(Color4B(255, 0, 0, 255));
 		this->addChild(this->lblMessage, 1);
 	}
@@ -198,8 +353,8 @@ void LoginScene::createLogin(){
 			origin.y + visibleSize.height - label->getContentSize().height));
 		this->addChild(label, 1);
 	}
-	auto textboxMargin = visibleSize.width/6;
-	auto lineHeight = visibleSize.height/10;
+	auto textboxMargin = visibleSize.width / 6;
+	auto lineHeight = visibleSize.height / 10;
 	auto x = origin.x + visibleSize.width / 2 - 2 * textboxMargin;
 	auto y = origin.y + visibleSize.height / 2 + 2 * lineHeight;
 	auto textColor = cocos2d::Color3B(0, 0, 0);
@@ -209,7 +364,7 @@ void LoginScene::createLogin(){
 		label->setPosition(Vec2(x, y));
 		this->addChild(label, 1);
 	}
-	this->userNameField = ui::EditBox::create(cocos2d::Size(cocos2d::Size(3 * textboxMargin, 7*lineHeight/8 )), "input.png");
+	this->userNameField = ui::EditBox::create(cocos2d::Size(cocos2d::Size(3 * textboxMargin, 7 * lineHeight / 8)), "input.png");
 	if (this->userNameField != nullptr)
 	{
 		this->userNameField->setPosition(Vec2(x + 2 * textboxMargin, y));
@@ -236,8 +391,8 @@ void LoginScene::createLogin(){
 	auto btnRegister = ui::Button::create("button.png", "button_selected.png");
 	if (btnRegister != nullptr)
 	{
-		btnRegister->setPosition(Vec2(x + textboxMargin+textboxMargin/3, y));
-		float scale = lineHeight/btnRegister->getContentSize().height;
+		btnRegister->setPosition(Vec2(x + textboxMargin + textboxMargin / 3, y));
+		float scale = lineHeight / btnRegister->getContentSize().height;
 		btnRegister->setScale(scale);
 		btnRegister->setTitleText("Register");
 		btnRegister->setTitleFontSize(16);
@@ -255,6 +410,18 @@ void LoginScene::createLogin(){
 		btnLogin->addClickEventListener(CC_CALLBACK_1(LoginScene::onLoginButtonClick, this));
 		this->addChild(btnLogin, 1);
 	}
+	y -= 1.5*lineHeight;
+	auto btnForgotPassword = ui::Button::create("button.png", "button_selected.png");
+	if (btnForgotPassword != nullptr)
+	{
+		btnForgotPassword->setPosition(Vec2(x + 2 * textboxMargin, y));
+		float scale = lineHeight / btnForgotPassword->getContentSize().height;
+		btnForgotPassword->setScale(scale);
+		btnForgotPassword->setTitleText("Forgot password");
+		btnForgotPassword->setTitleFontSize(16);
+		btnForgotPassword->addClickEventListener(CC_CALLBACK_1(LoginScene::onForgotPasswordClick, this));
+		this->addChild(btnForgotPassword, 1);
+	}
 
 	y -= 1.5*lineHeight;
 	this->lblMessage = Label::createWithTTF("", "fonts/Marker Felt.ttf", 24);
@@ -265,6 +432,7 @@ void LoginScene::createLogin(){
 		this->addChild(this->lblMessage, 1);
 	}
 }
+/****************** Handler CALLBACK********************/
 void LoginScene::onLoginButtonClick(Ref* sender)
 {
 	if (isWating)
@@ -340,6 +508,47 @@ void LoginScene::onCreateAccountCallBack(int error, std::string message){
 	else{
 		this->lblMessage->setTextColor(Color4B(255, 0, 0, 255));
 		this->lblMessage->setString(message);
+	}
+}
+void LoginScene::onForgotPasswordClick(cocos2d::Ref*sender){
+	this->createForgotPassword();
+}
+
+void LoginScene::onSendEmailResetPasswordClick(cocos2d::Ref*sender){
+	std::string email = emailField->getText();
+	if (email.length() == 0){
+		this->lblMessage->setString("The email can not be empty!");
+		return;
+	}
+	Grd::GrdManager::getInstance()->requestResetPassword(email, CC_CALLBACK_2(LoginScene::onSendEmailResetPasswordCallBack, this));
+}
+void LoginScene::onSendEmailResetPasswordCallBack(int error, std::string message){
+	if (error == 0){
+		this->createResetPassword();
+	}
+	else{
+		this->lblMessage->setString(message);
+	}
+}
+void LoginScene::onResetPasswordClick(cocos2d::Ref*sender){
+	std::string token = emailField->getText();
+	std::string password = passwordField->getText();
+	if (token.length() == 0){
+		this->lblMessage->setString("The token can not be empty!");
+		return;
+	}
+	if (password.length() == 0){
+		this->lblMessage->setString("The new password can not be empty!");
+		return;
+	}
+	Grd::GrdManager::getInstance()->resetPassword(token, password, CC_CALLBACK_2(LoginScene::onResetPasswordCallBack, this));
+}
+void LoginScene::onResetPasswordCallBack(int error, std::string message){
+	if (error != 0){
+		this->lblMessage->setString(message);
+	}
+	else{
+		this->lblMessage->setString("YOUR PASSWORD HAD BEEN RESET!");
 	}
 }
 void LoginScene::menuCloseCallback(Ref* pSender)

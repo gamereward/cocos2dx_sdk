@@ -49,6 +49,7 @@ namespace Grd{
 		this->registerCallBack(REGISTER_ACTION, &Grd::GrdManager::onRegisterCallBack);
 		this->registerCallBack(LOGOUT_ACTION, &Grd::GrdManager::onLogoutCallBack);
 		this->registerCallBack(REQUEST_RESETPASSWORD_ACTION, &Grd::GrdManager::onRequestResetPasswordCallBack);
+		this->registerCallBack(RESETPASSWORD_ACTION, &Grd::GrdManager::onResetPasswordCallBack);
 		this->registerCallBack(CALL_SERVERSCRIPT_ACTION, &Grd::GrdManager::onCallServerScriptCallBack);
 		this->registerCallBack(REQUEST_ENABLE_OTP_ACTION, &Grd::GrdManager::onRequestEnableOtpCallBack);
 		this->registerCallBack(ENABLE_OTP_ACTION, &Grd::GrdManager::onEnableOtpCallBack);
@@ -302,6 +303,21 @@ namespace Grd{
 		this->putStringFunc(callback);
 		this->requestHttp(LOGOUT_ACTION, &data, false);
 	}
+
+	void Grd::GrdManager::requestResetPassword(const std::string&email, const GrdStringFunc& callback){
+		std::map<std::string, std::string>data;
+		data.insert(std::pair<std::string, std::string>("email", email));
+		this->putStringFunc(callback);
+		this->requestHttp(REQUEST_RESETPASSWORD_ACTION, &data, false);
+	}
+
+	void Grd::GrdManager::resetPassword(const std::string&token, const std::string&newpassword, const GrdStringFunc& callback){
+		std::map<std::string, std::string>data;
+		data.insert(std::pair<std::string, std::string>("token", token));
+		data.insert(std::pair<std::string, std::string>("password", md5(newpassword)));
+		this->putStringFunc(callback);
+		this->requestHttp(RESETPASSWORD_ACTION, &data, false);
+	}
 	void Grd::GrdManager::requestEnableOtp(const GrdSpriteFunc& callback){
 		std::map<std::string, std::string>data;
 		this->putSpriteFunc(callback);
@@ -408,6 +424,13 @@ namespace Grd{
 		}
 	}
 	void Grd::GrdManager::onRequestResetPasswordCallBack(int error, Json* data, int callbackid){
+		GrdStringFunc callback = this->popStringFunc(callbackid);
+		std::string message = Json_getString(data, "message", "");
+		if (callback != nullptr){
+			callback(error, message);
+		}
+	}
+	void Grd::GrdManager::onResetPasswordCallBack(int error, Json* data, int callbackid){
 		GrdStringFunc callback = this->popStringFunc(callbackid);
 		std::string message = Json_getString(data, "message", "");
 		if (callback != nullptr){

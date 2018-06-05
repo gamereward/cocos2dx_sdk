@@ -24,12 +24,25 @@ private:
 	void createLogin();
 	void createRegister();
 	void createOtp();
+	void createForgotPassword();
+	void createResetPassword();
+	//Button callback
 	void onLoginButtonClick(cocos2d::Ref*sender);
 	void onRegisterButtonClick(cocos2d::Ref*sender);
 	void onBackButtonClick(cocos2d::Ref*sender);
 	void onCreateAccountButtonClick(cocos2d::Ref*sender);
+	void onForgotPasswordClick(cocos2d::Ref*sender);
+	void onSendEmailResetPasswordClick(cocos2d::Ref*sender);
+	void onResetPasswordClick(cocos2d::Ref*sender);
+
+	//GRD Callback
 	void onLoginCallBack(int error, std::string message);
 	void onCreateAccountCallBack(int error, std::string message);
+	void onSendEmailResetPasswordCallBack(int error, std::string message);
+	void onResetPasswordCallBack(int error, std::string message);
+
+
+
 	void menuCloseCallback(cocos2d::Ref* pSender);
 };
 
