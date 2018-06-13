@@ -194,7 +194,6 @@ void Game1::onGameBetFinished(int error, std::string msg, Json *result){
 			int yournumber = result->valueInt; //Position 2
 			result = result->next;
 			float money = result->valueFloat;//Position 3
-			user->balance += money;
 			std::map<int, Sprite*>::iterator it1 = buttons.find(yournumber - 1);
 			std::map<int, Sprite*>::iterator it2 = buttons.find(randNumber - 1);
 			this->balanceLabel->setString(user->balance.toString());

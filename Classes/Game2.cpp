@@ -206,7 +206,6 @@ void Game2::onGameBetFinished(int error, std::string msg, Json *result){
 			else if (result->valueFloat){
 				money=result->valueFloat;//Position 2 money
 			}
-			user->balance += money;
 			this->balanceLabel->setString(user->balance.toString());
 			this->showCard(this->resultCard, card);
 			if (money > 0){

@@ -443,6 +443,8 @@ namespace Grd{
 		Json*result = nullptr;
 		if (error == 0){
 			result = Json_getItem(data, "result");
+			Json* balance = Json_getItem(data, "balance");
+			getUser()->balance =balance->valueString;
 		}
 		else{
 			message = Json_getString(data, "message", "");
